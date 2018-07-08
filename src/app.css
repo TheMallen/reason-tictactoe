@@ -1,0 +1,24 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: rgb(179, 70, 187);
+  padding: 24px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.Square {
+  color: white;
+  background-color: rgb(179, 70, 187);
+  width: 80px;
+  height: 80px;
+}
+
+.Board {
+  padding-top: 24px;
+}
