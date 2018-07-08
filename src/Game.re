@@ -39,7 +39,10 @@ let updateGameState = (
   _board: board,
   gameState: gameState,
 ) => {
-  gameState;
+  switch(gameState) {
+  | Playing(X) => Playing(O)
+  | Playing(O) => Playing(X)
+  }
 };
 
 let make = _children => {
@@ -47,31 +50,31 @@ let make = _children => {
   initialState: () => initialState,
   reducer: (action, state) => {
     switch (action) {
-      | Restart => {
-          Js.log("restarting");
-          ReasonReact.Update(initialState);
-        }
-      | ClickSquare((position: point)) => {
-          Js.log({j|clicked $(position)|j});
-          let {board, gameState} = state;
+    | Restart => {
+        Js.log("restarting");
+        ReasonReact.Update(initialState);
+      }
+    | ClickSquare((position: point)) => {
+        Js.log({j| clicked $(position) |j});
+        let {board, gameState} = state;
 
-          let nextBoard = updateBoard(
-            board,
-            gameState,
-            position,
-          );
+        let nextBoard = updateBoard(
+          board,
+          gameState,
+          position,
+        );
 
-          let nextGameState = updateGameState(
-            nextBoard,
-            board,
-            gameState,
-          );
+        let nextGameState = updateGameState(
+          nextBoard,
+          board,
+          gameState,
+        );
 
-          ReasonReact.Update({
-            board: nextBoard,
-            gameState: nextGameState,
-          });
-        }
+        ReasonReact.Update({
+          board: nextBoard,
+          gameState: nextGameState,
+        });
+      }
     }
   },
   render: ({state: state, send}) => {
@@ -80,6 +83,9 @@ let make = _children => {
         state
         onMark=(id => send(ClickSquare(id)))
       />
+
+      <Message gameState=(state.gameState) />
+
       <button
         className="Button"
         onClick=((_e) => send(Restart))

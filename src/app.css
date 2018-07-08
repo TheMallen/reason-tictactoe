@@ -1,24 +1,84 @@
 .App {
-  text-align: center;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.Game {
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .App-header {
+  text-align: center;
   background-color: rgb(179, 70, 187);
   padding: 24px;
   color: white;
+  text-decoration: bold;
 }
 
 .App-intro {
   font-size: large;
 }
 
-.Square {
-  color: white;
-  background-color: rgb(179, 70, 187);
-  width: 80px;
-  height: 80px;
-}
-
 .Board {
   padding-top: 24px;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Board-row {
+  display: flex;
+  flex-direction: row;
+  max-width: 600px;
+}
+
+.Square {
+  border-radius: 10px;
+  flex: 1 1 auto;
+  width: 80px;
+  height: 80px;
+  font-size: 2rem;
+  transition: background-color, 200ms;
+  transition: border, 500ms;
+  color: white;
+  background-color: rgb(180, 70, 190);
+}
+
+.Square:hover {
+  background-color: rgb(200, 90, 210);
+}
+.Square:active {
+  background-color: rgb(160, 40, 160);
+}
+.Square:focus {
+  border: 6px solid rgb(160, 40, 160);
+  outline: none;
+}
+
+.Button {
+  color: white;
+  border-radius: 10px;
+  flex: 1 1 auto;
+  font-size: 1.5rem;
+  transition: background-color, 200ms;
+  transition: border, 500ms;
+  background-color: rgb(180, 70, 190);
+  border: 2px solid rgb(180, 70, 190);
+}
+
+.Button:hover {
+  background-color: rgb(200, 90, 210);
+}
+.Button:active {
+  background-color: rgb(160, 40, 160);
+}
+.Button:focus {
+  border: 2px solid rgb(160, 40, 160);
+  outline: none;
 }

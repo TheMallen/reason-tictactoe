@@ -5,7 +5,7 @@ let component = ReasonReact.statelessComponent("BoardRow");
 let make = (~gameState: gameState, ~row: row, ~onMark, ~index: int, _children) => {
    ...component,
    render: (_) =>
-    <div className="board-row">
+    <div className="Board-row">
       (
         row
         |> List.mapi((ind: int, value: field) => {
