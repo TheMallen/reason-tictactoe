@@ -17,11 +17,11 @@ let updateBoard = (
   position
 ) => {
 
-  let (xPos, yPos) = position;
+  let (rowPos, columnPos) = position;
 
   board |> List.mapi((xIndex: int, row: row) => {
     row |> List.mapi((yIndex: int, value: field) => {
-      if (xPos == xIndex && yPos == yIndex) {
+      if (rowPos == xIndex && columnPos == yIndex) {
         switch (gameState, value) {
         | (_, Marked(_)) => value
         | (Playing(player), Empty) => Marked(player)
@@ -34,14 +34,74 @@ let updateBoard = (
   });
 };
 
+let checkRow = (
+  player: player,
+  position: point,
+  board: board
+) => {
+  let (rowPos, columnPos) = position;
+  let row = rowPos |> List.nth(board);
+
+  row |> List.fold_left((accumulator, value: field) => {
+    accumulator && value == Marked(player)
+  }, true);
+};
+
+let checkDiagonal = (
+  player: player,
+  position: point,
+  board: board
+) => {
+  false;
+};
+
+let checkColumn = (
+  player: player,
+  position: point,
+  board: board
+) => {
+  false;
+};
+
+let checkMove = (
+  player: player,
+  position: point,
+  board: board,
+) => {
+  checkRow(player, position, board) ||
+  checkDiagonal(player, position, board) ||
+  checkColumn(player, position, board);
+};
+
+let nextPlayer = (player: player) => switch(player) {
+  | X => O
+  | O => X
+};
+
+let nextGameState = (
+  player: player,
+  position: point,
+  board: board
+) => {
+  let win = checkMove(player, position, board);
+
+  if (win) {
+    Winner(player)
+  } else {
+    let draw = false;
+    if (draw) Draw else Playing(nextPlayer(player));
+  }
+};
+
 let updateGameState = (
-  _nextBoard: board,
-  _board: board,
+  board: board,
+  position: point,
   gameState: gameState,
 ) => {
   switch(gameState) {
-  | Playing(X) => Playing(O)
-  | Playing(O) => Playing(X)
+  | Playing(X) => nextGameState(X, position, board)
+  | Playing(O) => nextGameState(O, position, board)
+  | _ => gameState
   }
 };
 
@@ -66,7 +126,7 @@ let make = _children => {
 
         let nextGameState = updateGameState(
           nextBoard,
-          board,
+          position,
           gameState,
         );
 

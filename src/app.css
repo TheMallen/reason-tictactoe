@@ -4,7 +4,7 @@
 }
 
 .Game {
-  padding-top: 24px;
+  padding-top: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,7 +14,7 @@
 .App-header {
   text-align: center;
   background-color: rgb(179, 70, 187);
-  padding: 24px;
+  padding: 16px;
   color: white;
   text-decoration: bold;
 }
@@ -24,8 +24,8 @@
 }
 
 .Board {
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,7 +39,7 @@
 }
 
 .Square {
-  border-radius: 10px;
+  border-radius: 12px;
   flex: 1 1 auto;
   width: 80px;
   height: 80px;
@@ -63,7 +63,7 @@
 
 .Button {
   color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   flex: 1 1 auto;
   font-size: 1.5rem;
   transition: background-color, 200ms;
