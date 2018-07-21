@@ -16,7 +16,6 @@ let updateBoard = (
   gameState: gameState,
   position
 ) => {
-
   let (rowPos, columnPos) = position;
 
   board |> List.mapi((xIndex: int, row: row) => {
@@ -39,11 +38,24 @@ let checkRow = (
   position: point,
   board: board
 ) => {
-  let (rowPos, columnPos) = position;
+  let (rowPos, _) = position;
   let row = rowPos |> List.nth(board);
 
-  row |> List.fold_left((accumulator, value: field) => {
-    accumulator && value == Marked(player)
+  row |> List.fold_left((accumulator, field: field) => {
+    accumulator && field == Marked(player)
+  }, true);
+};
+
+let checkColumn = (
+  player: player,
+  position: point,
+  board: board
+) => {
+  let (_, colPos) = position;
+
+  board |> List.fold_left((accumulator, row: row) => {
+    let field = colPos |> List.nth(row);
+    accumulator && field == Marked(player);
   }, true);
 };
 
@@ -52,13 +64,11 @@ let checkDiagonal = (
   position: point,
   board: board
 ) => {
-  false;
+  false
 };
 
-let checkColumn = (
-  player: player,
-  position: point,
-  board: board
+let checkStalemate = (
+  _board: board
 ) => {
   false;
 };
@@ -86,9 +96,9 @@ let nextGameState = (
   let win = checkMove(player, position, board);
 
   if (win) {
-    Winner(player)
+    Winner(player);
   } else {
-    let draw = false;
+    let draw = checkStalemate(board);
     if (draw) Draw else Playing(nextPlayer(player));
   }
 };

@@ -13,13 +13,13 @@ let make = (
     (
       state.board
         |> List.mapi(
-          (index: int, row: row) =>
+          (colIndex: int, row: row) =>
             <BoardRow
-              key=(string_of_int(index))
+              key=(string_of_int(colIndex))
               gameState=state.gameState
               row
               onMark
-              index
+              colIndex
             />
         )
         |> Array.of_list
