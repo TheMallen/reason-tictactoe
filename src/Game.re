@@ -11,6 +11,17 @@ let initialState = {
   gameState: Playing(X),
 };
 
+let winPositions = [
+  [(0, 2), (1, 2), (2, 2)],
+  [(0, 1), (1, 1), (2, 1)],
+  [(0, 0), (0, 1), (0, 2)],
+  [(2, 0), (2, 1), (2, 2)],
+  [(1, 0), (1, 1), (1, 2)],
+  [(0, 0), (0, 1), (0, 2)],
+  [(0, 0), (1, 1), (2, 2)],
+  [(2, 0), (1, 1), (0, 2)],
+];
+
 let updateBoard = (
   board: board,
   gameState: gameState,
@@ -33,55 +44,21 @@ let updateBoard = (
   });
 };
 
-let checkRow = (
-  player: player,
-  position: point,
-  board: board
-) => {
-  let (rowPos, _) = position;
-  let row = rowPos |> List.nth(board);
+let getField(board: board, pos: point) = {
+  let (rowPos, colPos) = pos;
+  colPos |> (List.nth(board, rowPos) |> List.nth);
+};
 
-  row |> List.fold_left((accumulator, field: field) => {
-    accumulator && field == Marked(player)
+let checkBoardIsWon = (combinations: list(list(point)), player: player, board: board, ) => {
+  combinations |> List.fold_left((accumulator: bool, combination: list(point)) => {
+    accumulator && combination |> List.fold_left((accumulator: bool, pos: point) => {
+      let field = getField(board, pos);
+      accumulator && field == Marked(player);
+    }, true);
   }, true);
 };
 
-let checkColumn = (
-  player: player,
-  position: point,
-  board: board
-) => {
-  let (_, colPos) = position;
-
-  board |> List.fold_left((accumulator, row: row) => {
-    let field = colPos |> List.nth(row);
-    accumulator && field == Marked(player);
-  }, true);
-};
-
-let checkDiagonal = (
-  player: player,
-  position: point,
-  board: board
-) => {
-  false
-};
-
-let checkStalemate = (
-  _board: board
-) => {
-  false;
-};
-
-let checkMove = (
-  player: player,
-  position: point,
-  board: board,
-) => {
-  checkRow(player, position, board) ||
-  checkDiagonal(player, position, board) ||
-  checkColumn(player, position, board);
-};
+let checkBoardIsWon3x3 = checkBoardIsWon(winPositions);
 
 let nextPlayer = (player: player) => switch(player) {
   | X => O
@@ -90,27 +67,25 @@ let nextPlayer = (player: player) => switch(player) {
 
 let nextGameState = (
   player: player,
-  position: point,
   board: board
 ) => {
-  let win = checkMove(player, position, board);
+  let win = checkBoardIsWon3x3(player, board);
 
   if (win) {
     Winner(player);
   } else {
-    let draw = checkStalemate(board);
+    let draw = false; /* checkStalemate(board); */
     if (draw) Draw else Playing(nextPlayer(player));
   }
 };
 
 let updateGameState = (
   board: board,
-  position: point,
   gameState: gameState,
 ) => {
   switch(gameState) {
-  | Playing(X) => nextGameState(X, position, board)
-  | Playing(O) => nextGameState(O, position, board)
+  | Playing(X) => nextGameState(X, board)
+  | Playing(O) => nextGameState(O, board)
   | _ => gameState
   }
 };
@@ -136,7 +111,6 @@ let make = _children => {
 
         let nextGameState = updateGameState(
           nextBoard,
-          position,
           gameState,
         );
 
